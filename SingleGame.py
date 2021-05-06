@@ -1,6 +1,8 @@
 import random
 import cv2
 import numpy as np
+
+
 def beaten_action(action):
     if action == "Rock":
         return "Paper"
@@ -21,8 +23,10 @@ class Game:
     def __init__(self, player):
         self.player = player
     def computerPlay(self):
+        winner, winner_action = "", ""
+        computer = ""
         count = 0
-        print("player:", self.player)
+
 
         actions = ["Rock", "Paper", "Scissors"]
         actionsCount = [0,0,0]
@@ -59,10 +63,18 @@ class Game:
             cv2.waitKey(1)
 
             if score_computer > score_player:
-                print("COMPUTER WINS!" , computer , " beats ", self.player)
+                winner =  "computer"
             elif score_computer < score_player:
-                print("YOU WIN!", self.player , " beats ", computer)
+                winner =  "player"
             else:
-                print("TIE")
+               winner =  "tie"
         else:
-            print("INVALID ACTION!!")
+            winner = "invalid"
+
+        if winner!="invalid":
+            if winner == "player":
+                return winner, self.player
+            else:
+                return winner, computer
+        else:
+            return "none","none"

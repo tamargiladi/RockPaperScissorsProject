@@ -1,6 +1,7 @@
 import cv2
 import FingerCoutnerModule as htm
-import GamePy
+import SingleGame
+import numpy as np
 
 
 def checkSingleGesture(fingers_list, thumb):
@@ -100,45 +101,59 @@ action = ""
 prev_left_count, prev_right_count =0 ,0
 count = 0
 countGame = 0
+result = []
 
-
+#====The game operation
 while countGame<100:
-    success, img =cap.read()
-    edges = cv2.Canny(img, 100, 200)
-    img = detector.findHands(img)
+    operate = True
+    while operate:
+        print(countGame)
+        success, img =cap.read()
+        edges = cv2.Canny(img, 100, 200)
+        img = detector.findHands(img)
 
-    right_space = 920
+        right_space = 920
 
-    lmList_left = detector.findPosition(img, draw=False)
+        lmList_left = detector.findPosition(img, draw=False)
 
-    handType,fingerCounter,running = detector.countSingle(lmList=lmList_left)
+        handType,fingerCounter,running = detector.countSingle(lmList=lmList_left)
 
-    if(fingerCounter==-2):
-        cv2.putText(img, "NO HANDS", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
-                    text_color_hands, 3)
-        running = True
-    else:
-        if fingerCounter==0:
-            action = "Rock"
-        elif fingerCounter==2:
-            action = "Scissors"
-        elif fingerCounter==5:
-            action = "Paper"
+        if(fingerCounter==-2):
+            cv2.putText(img, "NO HANDS", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
+                        text_color_hands, 3)
+            running = True
         else:
-            action = "INVALID ACTION"
+            if fingerCounter==0:
+                action = "Rock"
+            elif fingerCounter==2:
+                action = "Scissors"
+            elif fingerCounter==5:
+                action = "Paper"
+            else:
+                action = "INVALID ACTION"
 
-        cv2.putText(img, action, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
-                    text_color_hands, 3)
+            cv2.putText(img, action, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
+                        text_color_hands, 3)
 
 
-        g = GamePy.Game(player=action)
-
-        g.computerPlay()
-        cv2.waitKey(1000)
+            g = SingleGame.Game(player=action)
+            g_winner, g_action = g.computerPlay()
 
 
+            if g_winner:
+                result.append(g_winner)
 
 
+
+            operate = False
+
+    # TODO: OPERATION OF HAND!
+    #     # ========================================
+    #     #     HAND OPERATION GOES HERE
+    #     # ========================================
+
+    cv2.waitKey(100)
+    countGame = countGame + 1
     if running == False and count<4:
         running = True
         ("STOP STOP STOP STOP STOP")
@@ -152,15 +167,31 @@ while countGame<100:
     #print(handType,fingerCounter,running)
     #detector.findPositionMultiple()
 
+computerScore =  result.count('computer')
+playerScore = result.count('player')
 
 
-img[:,:] = text_color_count
-img_close = cv2.imread("images_other/Close.png")
-img[150:img_close.shape[0]+150,800:img_close.shape[1]+800]=img_close
+print(result)
+print("BIG WINNER:",end="")
+if(computerScore>playerScore):
+    print("computer!!")
+    #Winner V
+elif (playerScore>computerScore):
+    print("YOU!")
+    #GOOD SPORT, ONE THUMB
+else:
+    print("TIE")
+    #Shake hand
 
-cv2.putText(img, "GOODBYE!", (70, 400), cv2.FONT_HERSHEY_TRIPLEX, 4,
-                text_color_hands, 10)
-cv2.imshow("Image", img)
+#Computer makes funny gesture on winning and on lost
+
+# img[:,:] = text_color_count
+# img_close = cv2.imread("images_other/Close.png")
+# img[150:img_close.shape[0]+150,800:img_close.shape[1]+800]=img_close
+#
+# cv2.putText(img, "GOODBYE!", (70, 400), cv2.FONT_HERSHEY_TRIPLEX, 4,
+#                 text_color_hands, 10)
+# cv2.imshow("Image", img)
 
 
 
