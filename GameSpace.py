@@ -2,6 +2,7 @@ import cv2
 import FingerCoutnerModule as htm
 import SingleGame
 import numpy as np
+import GameInterface as GI
 
 
 def checkSingleGesture(fingers_list, thumb):
@@ -161,8 +162,9 @@ while countGame<100:
     elif running==True and count<100:
         count = 0
 
-    cv2.imshow("Image", img)
-
+    #cv2.imshow("Image", img)
+    gi = GI.GameWindow("player")
+    cv2.imshow("Image",gi.createWindow())
     cv2.waitKey(1)
     #print(handType,fingerCounter,running)
     #detector.findPositionMultiple()
