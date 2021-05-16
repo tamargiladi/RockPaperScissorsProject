@@ -9,12 +9,17 @@ def write_read(x):
     time.sleep(0.05)
     data = arduino.readline()
     return data
+#
+# while True:
+#     num = input("Enter a number: ") # Taking input from user
+#     value = write_read(num)
+#     print(value) # printing the value
 
-while True:
-    num = input("Enter a number: ") # Taking input from user
-    value = write_read(num)
+t=0
+while (t<5):
+    value = write_read("p")
     print(value) # printing the value
-
+    t+=1
 
 '''
 def doRock():
