@@ -2,6 +2,7 @@ import cv2
 import FingerCoutnerModule as htm
 import SingleGame
 import random
+import ExecuteHand
 import numpy as np
 # import GameInterface as GI
 # import ExecuteHand as EH
@@ -132,7 +133,7 @@ result = []
 #====The game operation
 
 
-while countGame<100:
+while countGame<1:
 
     #--START---The single game operation
     operate = True
@@ -169,21 +170,29 @@ while countGame<100:
             cv2.putText(img, action, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
                         text_color_hands, 3)
 
-            print(action)
-            actions = ["r","s","p"]
-            action_computer = 'Rock' #Random
+         #   print(action)
+
+            # ====Start random
+
+            my_dict = {1: 'Rock', 2: 'Paper', 3: 'Scissors'}
+            action_computer = my_dict[random.randint(1,3)] #Random
+           # print (action_computer)
+
+
             g = SingleGame.Game(player=action,computer=action_computer)
 
              #TODO: EXECUTE HAND HERE
 
+            if (action_computer == 'Rock'):
+                ExecuteHand.doRock()
+            elif (action_computer == 'Scissors'):
+                ExecuteHand.doScissors()
+            elif (action_computer == 'Paper'):
+                ExecuteHand.doPaper()
+
             g_winner, g_action = g.computerPlay()
 
-
-
-
-
-
-
+            print (g_winner)
 
             operate = False
 
