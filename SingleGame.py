@@ -20,50 +20,45 @@ def winner_action(action):
         return "Paper"
 
 class Game:
-    def __init__(self, player):
+    def __init__(self, player,computer):
         self.player = player
+        self.computer = computer
+
     def computerPlay(self):
         winner, winner_action = "", ""
-        computer = ""
         count = 0
 
 
-        actions = ["Rock", "Paper", "Scissors"]
         actionsCount = [0,0,0]
         score_player, score_computer = 0, 0
         if self.player!="INVALID ACTION":
-            while score_player==0 and score_computer==0 and count<4000:
-                computer = random.choices(actions)[0]
-                if self.player != computer:
-                    if self.player == "Rock":
-                        # Player wins
-                        if computer == "Scissors":
-                            score_player = score_player + 1
-                        elif computer == "Paper":
-                            score_computer = score_computer + 1
-                            actionsCount[1] = actionsCount[1]+1
-                    elif self.player == "Scissors":
-                        if computer == "Paper":
-                            score_player = score_player + 1
-                        elif computer == "Rock":
-                            score_computer = score_computer + 1
-                            actionsCount[0] = actionsCount[0]+1
+            if self.player != self.computer:
+                if self.player == "Rock":
+                    # Player wins
+                    if self.computer == "Scissors":
+                        score_player = score_player + 1
+                    elif self.computer == "Paper":
+                        score_computer = score_computer + 1
+                        actionsCount[1] = actionsCount[1]+1
+                elif self.player == "Scissors":
+                    if self.computer == "Paper":
+                        score_player = score_player + 1
+                    elif self.computer == "Rock":
+                        score_computer = score_computer + 1
+                        actionsCount[0] = actionsCount[0]+1
 
-                    # player is playing paper
-                    else:
-                        if computer == "Rock":
-                            score_player = score_player + 1
-                        elif computer=="Scissors":
-                            score_computer = score_computer + 1
-                            actionsCount[2] = actionsCount[2]+1
+                # player is playing paper
+                else:
+                    if self.computer == "Rock":
+                        score_player = score_player + 1
+                    elif self.computer=="Scissors":
+                        score_computer = score_computer + 1
+                        actionsCount[2] = actionsCount[2]+1
 
-
-                count = count + 1
-            #print("GOOD:",actions[actionsCount.sort()[2]])
-            cv2.waitKey(1)
+            # cv2.waitKey(1)
 
             if score_computer > score_player:
-                winner =  "computer"
+                winner = "computer"
             elif score_computer < score_player:
                 winner =  "player"
             else:
@@ -74,7 +69,9 @@ class Game:
         if winner!="invalid":
             if winner == "player":
                 return winner, self.player
+            elif winner == "computer":
+                return winner, self.computer
             else:
-                return winner, computer
+                return "none","none"
         else:
             return "none","none"

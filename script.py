@@ -1,6 +1,1 @@
-import mediapipe
 
-
-
-
-print("gello")
