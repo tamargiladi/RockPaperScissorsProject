@@ -1,10 +1,34 @@
 import cv2
 import FingerCoutnerModule as htm
 import SingleGame
+import random
 import numpy as np
-import GameInterface as GI
+# import GameInterface as GI
+# import ExecuteHand as EH
+
+class GameProgress:
+    def __init__(self, player_move,computer_move,score_computer=0,score_player=0):
+        self.player_move = player_move
+        self.computer_move = computer_move
+        self.score_computer = score_computer
+        self.score_player = score_player
+
+    def get_player_move(self):
+        return self.player_move
+
+    def get_computer_move(self):
+        return self.computer_move
+
+    def get_score_player(self):
+        return self.score_player
+
+    def get_score_computer(self):
+        return self.score_computer
 
 
+
+
+#=======FUNCTIONS SECTION=================
 def checkSingleGesture(fingers_list, thumb):
 
     down_fingers =  (fingers_list["Ring"] is False) and (fingers_list["Middle"] is False)
@@ -13,8 +37,6 @@ def checkSingleGesture(fingers_list, thumb):
     return down_fingers and up_fingers
 
 def specialDetect():
-
-
     #multi_hand_landmarks
     #MULTI_HANDEDNESS
 
@@ -26,7 +48,6 @@ def specialDetect():
     else:
 
         hand_type = "Left"
-        #TODO: Function that recognize hand type
             #Here function...
 
         hand_type = handType_tmp
@@ -103,25 +124,37 @@ prev_left_count, prev_right_count =0 ,0
 count = 0
 countGame = 0
 result = []
+#
+# ng = GI.window()
+#
+# ng.operate_root()
 
 #====The game operation
+
+
 while countGame<100:
+
+    #--START---The single game operation
     operate = True
+
     while operate:
-        print(countGame)
+
+
+        #>>>>Camera detection
         success, img =cap.read()
         edges = cv2.Canny(img, 100, 200)
         img = detector.findHands(img)
 
-        right_space = 920
+        lmList = detector.findPosition(img, draw=False)
+        handType,fingerCounter,running = detector.countSingle(lmList=lmList)
 
-        lmList_left = detector.findPosition(img, draw=False)
+        #TODO: MACHINE LEARNING ALGORITHMS OR PSYCHOLOGY ALGORITHM
+        #TODO: Saving database of
 
-        handType,fingerCounter,running = detector.countSingle(lmList=lmList_left)
-
+        #Calculates actions of the user
         if(fingerCounter==-2):
-            cv2.putText(img, "NO HANDS", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
-                        text_color_hands, 3)
+            # cv2.putText(img, "NO HANDS", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
+            #             text_color_hands, 3)
             running = True
         else:
             if fingerCounter==0:
@@ -136,56 +169,47 @@ while countGame<100:
             cv2.putText(img, action, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
                         text_color_hands, 3)
 
+            print(action)
+            actions = ["r","s","p"]
+            action_computer = 'Rock' #Random
+            g = SingleGame.Game(player=action,computer=action_computer)
 
-            g = SingleGame.Game(player=action)
+             #TODO: EXECUTE HAND HERE
+
             g_winner, g_action = g.computerPlay()
 
 
-            if g_winner:
-                result.append(g_winner)
+
+
+
 
 
 
             operate = False
 
-    # TODO: OPERATION OF HAND!
-    #     # ========================================
-    #     #     HAND OPERATION GOES HERE
-    #     # ========================================
+
+    # ng.change_computer_score(result.count("computer"))
 
     cv2.waitKey(100)
     countGame = countGame + 1
-    if running == False and count<4:
-        running = True
-        ("STOP STOP STOP STOP STOP")
-        count = count + 1
-    elif running==True and count<100:
-        count = 0
-
-    #cv2.imshow("Image", img)
-    gi = GI.GameWindow("player")
-    cv2.imshow("Image",gi.createWindow())
-    cv2.waitKey(1)
-    #print(handType,fingerCounter,running)
-    #detector.findPositionMultiple()
 
 computerScore =  result.count('computer')
 playerScore = result.count('player')
 
 
-print(result)
-print("BIG WINNER:",end="")
-if(computerScore>playerScore):
-    print("computer!!")
-    #Winner V
-elif (playerScore>computerScore):
-    print("YOU!")
-    #GOOD SPORT, ONE THUMB
-else:
-    print("TIE")
-    #Shake hand
-
-#Computer makes funny gesture on winning and on lost
+# print(result)
+# print("BIG WINNER:",end="")
+# if(computerScore>playerScore):
+#     print("computer!!")
+#     #Winner V
+# elif (playerScore>computerScore):
+#     print("YOU!")
+#     #GOOD SPORT, ONE THUMB
+# else:
+#     print("TIE")
+#     #Shake hand
+#
+# #Computer makes funny gesture on winning and on lost
 
 # img[:,:] = text_color_count
 # img_close = cv2.imread("images_other/Close.png")
