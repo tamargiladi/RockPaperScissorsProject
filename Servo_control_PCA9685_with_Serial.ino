@@ -53,7 +53,7 @@ int pinkyFingerOpen = 110;
 int pinkyFingerClose = 300;
 
 //--------------delay time----------//
-int shortDelayTime = 50;
+int shortDelayTime = 100;
 int longDelayTime = 200;
 
 //------------------servo number--------//
@@ -209,13 +209,14 @@ void scissors(){
       openIndexFinger();
     }
     openMiddleFinger();
+    closeRingFinger();
+    closePinkyFinger();
+   
     if (thumb == false){
-      delay(longDelayTime);
       closeThumb();
     }
     thumb = true;
-    closeRingFinger();
-    closePinkyFinger();
+    
 }
 
 void setup() {
