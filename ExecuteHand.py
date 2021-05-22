@@ -2,7 +2,7 @@
 import serial
 import time
 
-=======
+# =======
 TIME = 8
 arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
 
@@ -16,22 +16,20 @@ def doRock():
     t = 0
     while (t <TIME):
         value = write_read("r")
-        print(value)  # printing the value
+   #     print(value)  # printing the value
         t += 1
 
 def doScissors():
     t = 0
     while (t < TIME):
         value = write_read("s")
-        print(value)  # printing the value
+   #     print(value)  # printing the value
         t += 1
 
 def doPaper():
     t = 0
     while (t <TIME):
         value = write_read("p")
-        print(value)  # printing the value
+    #    print(value)  # printing the value
         t += 1
-
-
 
