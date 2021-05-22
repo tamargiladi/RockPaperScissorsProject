@@ -8,7 +8,7 @@ from queue import LifoQueue
 class Fingers():
     def __init__(self):
         self.countFingers = 0
-        self.S = LifoQueue(maxsize =10)
+        self.S = LifoQueue(maxsize =15)
     def startLoop(self):
 
         wCam, hCam = 640, 480
@@ -48,7 +48,6 @@ class Fingers():
                         fingers.append(1)
                     else:
                         fingers.append(0)
-
                 self.S.put(fingers.count(1))
 
 

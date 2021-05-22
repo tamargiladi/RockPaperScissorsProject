@@ -2,7 +2,6 @@
 import serial
 import time
 
-=======
 TIME = 8
 arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
 

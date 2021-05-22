@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import ttk
 import time
 import fingersCount as FC
+# import ExecuteHand as EH
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -230,8 +231,18 @@ def operate():
                 # TODO: Saving database of
 
                 #=======KEEP OUT
-                #TODO: EXECUTE HAND HERE
-                #=======KEEP OUT
+
+                if (computer_action == 'Rock'):
+                    print("doRock()")
+                    #EH.doRock()
+                elif (computer_action == 'Scissors'):
+                    print("doScissors()")
+                    # EH.doScissors()
+                elif (computer_action == 'Paper'):
+                    print("doPaper()")
+                    # EH.doPaper()
+
+
                 if action != "INVALID ACTION":
                     g_winner= SingleGame.is_winner(int(ML.action_to_number(action)),int(ML.action_to_number(computer_action)))
                     winner = ""
