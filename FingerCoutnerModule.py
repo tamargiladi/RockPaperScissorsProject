@@ -71,38 +71,6 @@ class handDetector():
 
         return lmList
 
-    #
-    # def findPositionMultiple(self,img):
-    #     label = "N"
-    #     lmList_left = []
-    #     lmList_right = []
-    #     if self.results.multi_handedness and len(self.results.multi_handedness)==2:
-    #         if (self.results.multi_handedness[0].classification[0].label == "Left"):
-    #             left = self.results.multi_hand_landmarks[0]
-    #             right = self.results.multi_hand_landmarks[1]
-    #         else:
-    #             left = self.results.multi_hand_landmarks[1]
-    #             right = self.results.multi_hand_landmarks[0]
-    #
-    #         for id, lm in enumerate(left.landmark):
-    #             # print(id, lm)
-    #             h, w, c = img.shape
-    #             cx, cy = int(lm.x * w), int(lm.y * h)
-    #             # print(id, cx, cy)
-    #             lmList_left.append([id, cx, cy])
-    #
-    #         for id, lm in enumerate(right.landmark):
-    #             # print(id, lm)
-    #             h, w, c = img.shape
-    #             cx, cy = int(lm.x * w), int(lm.y * h)
-    #             # print(id, cx, cy)
-    #             lmList_right.append([id, cx, cy])
-    #
-    #
-    #     return lmList_left,lmList_right
-    #
-
-
 
     def countSingle(self,lmList):
         hand_type, count_fingers = "No detection", -2
@@ -112,7 +80,6 @@ class handDetector():
             # ====HAND TYPE====
             if len(self.results.multi_hand_landmarks)==1:
                 count_fingers = 0
-                #print(self.results.multi_handedness)
                 hand_label = self.results.multi_handedness[0].classification[0].label
                 if hand_label =="Left":
                     hand_type="Left"
@@ -132,14 +99,6 @@ class handDetector():
                             count_fingers = count_fingers + 1
                             fingerState[fingerName] = True
 
-                if hand_type == "Right":
-                    statement = (lmList[fingerUp][1] < lmList[fingerLow][1] or  (lmList[fingerUp][1] < lmList[5][1]))
-                else:
-                    statement = (lmList[fingerUp][1] > lmList[fingerLow][1] or (lmList[fingerUp][1] > lmList[5][1]))
-
-                if statement:
-                    count_fingers = count_fingers + 1
-                    fingerState["Thumb"] = True
 
 
             else:
@@ -159,58 +118,6 @@ class handDetector():
 
         return hand_type, count_fingers, not (running_state_down and running_state_up)
 
-    # def countTwo(self,lmList_left,lmList_right):
-    #     fingerArr_left = [["Pinky", 20, 18], ["Ring", 16, 14], ["Middle", 12, 10], ["Index", 8, 6], ["Thumb", 4, 5]]
-    #     fingerArr_right = [["Pinky", 20, 18], ["Ring", 16, 14], ["Middle", 12, 10], ["Index", 8, 6], ["Thumb", 4, 5]]
-    #
-    #     fingerState_left = {"Thumb":False,"Index":False,"Middle":False,"Ring":False, "Pinky":False}
-    #     fingerState_right = {"Thumb":False,"Index":False,"Middle":False,"Ring":False, "Pinky":False}
-    #
-    #     count_fingers_left =0
-    #     count_fingers_right = 0
-    #     for finger in fingerArr_left:
-    #         fingerName, fingerUp, fingerLow = finger[0], finger[1], finger[2]
-    #
-    #         statement = True
-    #         if fingerName != "Thumb":
-    #             statement = lmList_left[fingerUp][2] < lmList_left[fingerLow][2]
-    #         else:
-    #             statement = lmList_left[fingerUp][1] > lmList_left[fingerLow][1]
-    #
-    #         fingerState_left[fingerName] = statement
-    #
-    #         if statement:
-    #             count_fingers_left = count_fingers_left + 1
-    #             fingerState_left[fingerName] = True
-    #
-    #
-    #     for finger in fingerArr_right:
-    #         fingerName, fingerUp, fingerLow = finger[0], finger[1], finger[2]
-    #
-    #         statement = True
-    #
-    #         if fingerName != "Thumb":
-    #             statement = lmList_right[fingerUp][2] < lmList_right[fingerLow][2]
-    #         else:
-    #             statement = lmList_right[fingerUp][1] < lmList_right[fingerLow][1]
-    #
-    #
-    #         fingerState_right[fingerName] = statement
-    #
-    #         if statement:
-    #             count_fingers_right = count_fingers_right + 1
-    #             fingerState_right[fingerName] = True
-    #
-    #
-    #     state_left_down = fingerState_left["Ring"] is False and fingerState_left["Middle"] is False
-    #     state_left_up = fingerState_left["Pinky"] and fingerState_left["Thumb"] and fingerState_left["Index"]
-    #
-    #     state_right_down = fingerState_right["Ring"] is False and fingerState_right["Middle"] is False
-    #     state_right_up = fingerState_right["Pinky"] and fingerState_right["Thumb"] and fingerState_right["Index"]
-    #
-    #     final_state = (state_left_down and state_left_up) or (state_right_down and state_right_up)
-    #
-    #     return count_fingers_right, count_fingers_left, not final_state
 
 # def main():
 #     pTime = 0

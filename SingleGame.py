@@ -2,8 +2,44 @@ import random
 import cv2
 import numpy as np
 
+def is_winner(p2,p1):
 
-def beaten_action(action):
+    #Rock - 1
+    #Paper - 2
+    #Scissors - 3
+
+
+    if p2==1:
+        if p1==3:
+            return 1
+        elif p1==2:
+            return -1
+        else:
+            return 0
+    elif p2==2:
+        if p1==1:
+            return 1
+        elif p1==3:
+            return -1
+        else:
+            return 0
+    else:
+        if p1==2:
+            return 1
+        elif p1==1:
+            return -1
+        else:
+            return 0
+
+def psychology_beat(prev_action_player, prev_action_computer):
+    player_status = is_winner(prev_action_player,prev_action_computer)
+
+    if player_status == 1 or player_status ==0:
+        return prev_action_player
+    else:
+        return beat_action(prev_action_computer)
+
+def beat_action(action):
     if action == "Rock":
         return "Paper"
     elif action =="Paper":

@@ -12,18 +12,28 @@ import time
 
 import ModelMLModule as ML_DATA
 
+#
+# def prediction_NB(X_train, X_test, y_train):
+#     gnb = GaussianNB()
+#     y_pred = gnb.fit(X_train, y_train).predict(X_test)
+#
 
-def prediction_NB(X_train, X_test, y_train):
-    gnb = GaussianNB()
-    y_pred = gnb.fit(X_train, y_train).predict(X_test)
 
+def KNN_train(X):
 
+    y = X["p1_i"]
+    y = y.astype('int')
+    X = X.drop(columns=["p2_i","p1_i"])
 
-def prediction_KNN(X_train, X_test, y_train):
-    neigh = KNeighborsClassifier(n_neighbors=int(np.sqrt(X_train.shape[0])))
+    TEST_SIZE = 0.1
+    neigh = KNeighborsClassifier(n_neighbors=int(np.sqrt(TEST_SIZE*X.shape[0])))
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = TEST_SIZE, random_state = 0)
     neigh.fit(X_train, y_train)
 
-    return neigh.predict(X_test)
+    return neigh
+
+def KNN_prediction(X_test,knn):
+    return knn.predict(X_test)
 
 def is_winner(p2,p1):
 
@@ -54,99 +64,56 @@ def is_winner(p2,p1):
         else:
             return 0
 
-
-
-
-def prediction_trees(X_train,X_test,y_train):
-    clf = tree.DecisionTreeClassifier()
-    clf = clf.fit(X_train, y_train)
-
-    return clf.predict(X_test)
-
-# def prediction_LinearRegression(X_train,X_test, y_train):
-#     reg = LinearRegression().fit(X_train, y_train)
-#
-#     print(reg.score(X_train, y_train))
-#
-#
-#
-#     return reg.predict(X_test)
-
-def predict_():
+def get_table():
     data = pd.read_csv("data/Rock_Paper_Scissors_Raw.csv")
     df = pd.DataFrame(data)
 
     df_final =ML_DATA.final_organize(df)
-    df_final['winner_1'] = None
-    df_final['winner_2'] = None
-    df_final['winner_3'] = None
-
-    for ind in df_final.index:
-        df_final["winner_1"].values[ind]= is_winner(df_final["p2_i-2"].values[ind], df_final["p1_i-2"].values[ind])
-
-        df_final["winner_2"].values[ind]=  df_final["winner_1"].values[ind] + is_winner(df_final["p2_i-1"].values[ind], df_final["p1_i-1"].values[ind])
-
-        df_final["winner_3"].values[ind]=  df_final["winner_2"].values[ind] + is_winner(df_final["p2_i"].values[ind], df_final["p1_i"].values[ind])
+    # df_final['winner_1'] = None
+    # df_final['winner_2'] = None
+    # df_final['winner_3'] = None
+    # #
+    # # for ind in df_final.index:
+    # #     df_final["winner_1"].values[ind]= is_winner(df_final["p2_i-2"].values[ind], df_final["p1_i-2"].values[ind])
+    # #     df_final["winner_2"].values[ind]=  df_final["winner_1"].values[ind] + is_winner(df_final["p2_i-1"].values[ind], df_final["p1_i-1"].values[ind])
+    # #     df_final["winner_3"].values[ind]=  df_final["winner_2"].values[ind] + is_winner(df_final["p2_i"].values[ind], df_final["p1_i"].values[ind])
 
     df_final = df_final.astype(int)
 
-    # df_final["p2_1"] = is_win
-    y = df_final["p2_i"]
-    y = y.astype('int')
-    print(y)
-    X = df_final.drop(columns=["p2_i","p1_i","winner_3"])
-
-    # X["p2_i-1"] = -1*X["p2_i-1"]
-    # X["p2_i-2"] = -1*X["p2_i-2"]
-
-    print(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.7, random_state = 0)
 
 
-    #PREDICTIONS
+    return df_final
 
-    start_KNN = time.time()
-    y_predicted_KNN = prediction_KNN(X_train, X_test, y_train)
-    end_KNN = time.time()
+def create_results_table():
+    return pd.DataFrame(0,index=[0],columns=["p1_i-1","p2_i-1","p1_i-2","p2_i-2"])
 
-    start_tree = time.time()
-    y_predicted_tree = prediction_trees(X_train,X_test,y_train)
+def update_results_table(player, computer, game_ind, table_ind, table):
+    if (game_ind+1) %3==1:
+        table = table.append(pd.Series([0,0,0,0],index=["p1_i-1","p2_i-1","p1_i-2","p2_i-2"], name=str(game_ind)))
 
-    end = time.time()
+        table["p1_i-2"].values[table_ind] = computer
+        table["p2_i-2"].values[table_ind] = player
+        # print(table)
 
-    # y_predicted_LinearReg = prediction_LinearRegression(X_train, X_test, y_train)
-
-    y_pred_NB = prediction_NB(X_train,X_test, y_train )
-
-    KNN_accuracy = accuracy_score(y_test, y_predicted_KNN)
-    trees_accuracy = accuracy_score(y_test, y_predicted_tree)
-
-    # lg_accuracy = (y_predicted_LinearReg == y_test).value_counts()
-
-    # print(X_test.shape[0])
-
-    print("KNN:",KNN_accuracy)
-    print("tree:", trees_accuracy)
-
-    print(y_predicted_tree, y_test.values)
-    # print("lg_accuracy:", lg_accuracy)
-
-    # rows_num = y_predicted_tree.shape[0]
-    # s_trees = pd.Series(X_test["p1_i"].values)
-    # s_test = pd.Series(y_test.values)
-
-    # print("arrived  df_winners....")
-    # # df_winners = pd.DataFrame(X_test["p1_i"].values,y_test.values,np.zeros(rows_num))
-    # # print(df_winners)
-    # for ind in range(rows_num):
-    #     print(s_trees[ind], s_test[ind])
-    #     if s_trees[ind] == 1 and s_test[ind]==3:
-    #         print("winner")
+    elif (game_ind+1) %3==2:
+        table["p1_i-1"].values[table_ind]= computer
+        table["p2_i-1"].values[table_ind] = player
+        # print(table)
 
 
+    return table
 
 
-predict_()
+def number_to_action(num):
+    actions = ["Rock","Paper","Scissors"]
+    return actions[num-1]
+
+def action_to_number(action):
+    if action == "Rock":
+        return 1
+    elif action=="Paper":
+        return 2
+    elif action=="Scissors":
+        return 3
 
 
