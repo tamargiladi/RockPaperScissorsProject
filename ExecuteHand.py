@@ -2,8 +2,8 @@
 import serial
 import time
 
-ITERATIONS_NUM = 8
-
+=======
+TIME = 8
 arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
 
 def write_read(x):
@@ -12,30 +12,26 @@ def write_read(x):
     data = arduino.readline()
     return data
 
-
-def action(a):
+def doRock():
     t = 0
-    while t<ITERATIONS_NUM:
-        num = input("Enter a number: ") # Taking input from user
-        value = write_read(a)
-        print(value) # printing the value
+    while (t <TIME):
+        value = write_read("r")
+        print(value)  # printing the value
+        t += 1
+
+def doScissors():
+    t = 0
+    while (t < TIME):
+        value = write_read("s")
+        print(value)  # printing the value
+        t += 1
+
+def doPaper():
+    t = 0
+    while (t <TIME):
+        value = write_read("p")
+        print(value)  # printing the value
+        t += 1
 
 
 
-
-
-
-# def doRock():
-#     value = write_read("r")
-#     print(value)  # printing the value
-#
-#
-# def doScissors():
-#     value = write_read("s")
-#     print(value)  # printing the value
-#
-#
-# def doPaper():
-#     value = write_read("p")
-#     print(value)  # printing the value
-#
