@@ -9,9 +9,8 @@ import GameSpace as GS
 
 # game = GS.GameProgress()
 
-
-playerScore = 0
 playerMove= "Rock"
+playerScore = 0
 computerScore = 0
 computerMove= "Paper"
 labelWidth = 20
@@ -19,14 +18,10 @@ Color = 'aqua'
 game = GS.GameProgress()
 status = "Not ready!"  # (Not ready/Ready) get this from the gameSpace
 
-
 root = Tk()
 root.title("Rock Paper Scissors")
 root.configure(background=Color)
 #root.geometry("400x400")
-
-
-
 
 statusLabel = Label(root, text=status, pady=50, font=("Helvetica", 15), background=Color)
 statusLabel.grid(row=0, column=0, columnspan=2)
@@ -55,6 +50,9 @@ playerScoreLabel.pack()
 
 start = Button(root, text="Start", borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
 start.grid(row=3, column=0, columnspan=2, pady=50)
+
+
+#game.operate()
 
 root.mainloop()
 
