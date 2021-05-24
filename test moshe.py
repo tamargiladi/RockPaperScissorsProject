@@ -3,23 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tkinter import *
 import GameSpace as GS
+import mediapipe as mp
+import time
+import os
+import HandTrackingModule as htm
+import matplotlib.pyplot as plt
 
 #def updateLabel(num):
 #    label.config(str(num))
 
 # game = GS.GameProgress()
-
-
-playerScore = 0
-import cv2
-import mediapipe as mp
-import time
-import os
-import HandTrackingModule as htm
-from tkinter import *
-
-import numpy as np
-import matplotlib.pyplot as plt
 
 playerScore = 0
 playerMove = "Rock"
@@ -85,7 +78,7 @@ playerScoreFrame.grid(row=2, column=1)
 playerScoreLabel = Label(playerScoreFrame, text=playerScore, width=labelWidth, padx=10, pady=10, font=("Helvetica", 20))
 playerScoreLabel.pack()
 
-start = Button(root, text="Start", borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
+start = Button(root, text="Start", command = root.update_idletasks(), borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
 start.grid(row=3, column=0, columnspan=2, pady=50)
 
 
@@ -119,13 +112,13 @@ if len(lmList) != 0:
 #        cv2.rectangle(img, (10, 10), (100, 120), (0, 255, 0), cv2.FILLED)
 #        cv2.putText(img, str(totalFingers), (20, 105), cv2.FONT_HERSHEY_PLAIN, 7, (255, 0, 0), 15)
 
-    cTime = time.time()
-    fps = 1 / (cTime - pTime)
-    pTime = cTime
+#    cTime = time.time()
+#    fps = 1 / (cTime - pTime)
+#    pTime = cTime
 #    cv2.putText(img, f'FPS: {int(fps)}', (250, 70), cv2.FONT_HERSHEY_PLAIN, 3, (200, 0, 0), 3)
 
 #    cv2.imshow("Image", img)
-    cv2.waitKey(1)
+#    cv2.waitKey(1)
 
 root.mainloop()
 

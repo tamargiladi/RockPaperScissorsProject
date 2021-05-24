@@ -1,33 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 
 import cv2
 import mediapipe as mp
 import time
 import os
 import HandTrackingModule as htm
-from tkinter import *
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-playerScore = 0
-playerMove = "Rock"
-computerScore = 0
-computerMove = "Paper"
-labelWidth = 20
-Color = 'aqua'
-status = "Not ready!"  # (Not ready/Ready) get this from the gameSpace
-
-root = Tk()
-root.title("Rock Paper Scissors")
-root.configure(background=Color)
-# root.geometry("400x400")
-
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -50,44 +29,8 @@ pTime = 0
 cTime = 0
 
 tipIds = [4, 8, 12, 16, 20]
-
-while True:
-
-    statusLabel = Label(root, text=status, pady=50, font=("Helvetica", 15), background=Color)
-    statusLabel.grid(row=0, column=0, columnspan=2)
-
-    computerMoveFrame = LabelFrame(root, text="Computer move", borderwidth=3, padx=30, pady=50, font=("Helvetica", 15),
-                                   background=Color)
-    computerMoveFrame.grid(row=1, column=0)
-    computerMoveLabel = Label(computerMoveFrame, text=computerMove, width=labelWidth, padx=10, pady=10,
-                              font=("Helvetica", 20))
-    computerMoveLabel.pack()
-
-    playerMoveFrame = LabelFrame(root, text="Player Move", borderwidth=3, padx=30, pady=50, font=("Helvetica", 15),
-                                 background=Color)
-    playerMoveFrame.grid(row=1, column=1)
-    playerMoveLabel = Label(playerMoveFrame, text=playerMove, width=labelWidth, padx=10, pady=10,
-                            font=("Helvetica", 20))
-    playerMoveLabel.pack()
-
-    computerScoreFrame = LabelFrame(root, text="Computer Score", borderwidth=3, padx=30, pady=50,
-                                    font=("Helvetica", 15), background=Color)
-    computerScoreFrame.grid(row=2, column=0)
-    computerScoreLabel = Label(computerScoreFrame, text=computerScore, width=labelWidth, padx=10, pady=10,
-                               font=("Helvetica", 20))
-    computerScoreLabel.pack()
-
-    playerScoreFrame = LabelFrame(root, text="Player Score", borderwidth=3, padx=30, pady=50, font=("Helvetica", 15),
-                                  background=Color)
-    playerScoreFrame.grid(row=2, column=1)
-    playerScoreLabel = Label(playerScoreFrame, text=playerScore, width=labelWidth, padx=10, pady=10,
-                             font=("Helvetica", 20))
-    playerScoreLabel.pack()
-
-    start = Button(root, text="Start", borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
-    start.grid(row=3, column=0, columnspan=2, pady=50)
-
-    # root.mainloop()
+t=0
+while (t<1):
 
     success, img = cap.read()
     img = detector.findHands(img)
@@ -129,6 +72,7 @@ while True:
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
+    t+=1
 
 """
 with mp_hands.Hands(
