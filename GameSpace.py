@@ -7,6 +7,11 @@ from tkinter import ttk
 import time
 import fingersCount as FC
 # import ExecuteHand as EH
+import PsychologyModule as PSYCH
+from queue import Queue
+
+MAX_ROUNDS = 2
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -196,93 +201,12 @@ class GameProgress:
             computerScore = 0
 
 
-# #=======FUNCTIONS SECTION=================
-# def checkSingleGesture(fingers_list, thumb):
-#
-#     down_fingers =  (fingers_list["Ring"] is False) and (fingers_list["Middle"] is False)
-#     up_fingers = fingers_list["Index"] and fingers_list["Pinky"] and  thumb
-#
-#     return down_fingers and up_fingers
-#
-# def specialDetect():
-#     #multi_hand_landmarks
-#     #MULTI_HANDEDNESS
-#
-#     num_of_hands = numOfHands_tmp
-#
-#
-#     if(num_of_hands>1):
-#         return "Both"
-#     else:
-#
-#         hand_type = "Left"
-#             #Here function...
-#
-#         hand_type = handType_tmp
-#
-#         return hand_type
-#
-# def countSingle(handType):
-#
-#     fingers_list = {"Pinky":True,"Ring":False,
-#                     "Middle":False,"Index":True}
-#
-#     thumb = False
-#
-#
-#
-#     #TODO: Calculate number of all fingers except thumb
-#     #Your code
-#
-#     num_of_fingers = numOfFingers_tmp
-#
-#
-#
-#
-#     #====THUMB CACLUALTION=====#
-#
-#     if(handType=="Left"):
-#         #TODO: Function that calculates thumb of left hand
-#         #Your code here
-#         thumb = thumbLeft_tmp
-#
-#     else:
-#         #TODO: Function that calcualtes thumb of right hand
-#         #Your code here...
-#         thumb = thumbRight_tmp
-#
-#
-#     return num_of_fingers, checkSingleGesture(fingers_list,thumb)
-
-
 def operate():
-    for i in range(12):
-        print("ENTERED!")
-    #todo:
-    #  remove later !!!!
-    printed =False
-
-    # todo================
-    text_color_hands = (0,69,255)
-    text_color_count = (209,206,0)
-
-
-    #Determines if the program should continue or not
-    running, countLeft, countRight = True,0,0
-
-    # detector = htm.handDetector(detectionCon=0.75)
-
-
-    KNN = ML.KNN_train(ML.get_table())
-    table_ML = ML.create_results_table()
-
-    #print(table_ML)
-
-
-    #Video conf
 
 
 
+
+    #Saves the action of the player every game
     action = ""
 
     ind_table = 0
@@ -294,72 +218,67 @@ def operate():
 
 
     last_computer_action = ""
+
+
+    pQ = Queue(maxsize=MAX_ROUNDS)
+    cQ = Queue(maxsize=MAX_ROUNDS)
+
     permitted_actions = [0,2,5]
+
     for count in range(10):
         while countGame<10:
+            computer_action = ""
             print("GO")
 
             #--START---The single game operation
 
-            fg.startLoop()
             #>>>>Camera detection
+            fg.startLoop()
+
+
             fingerCounter = fg.getCount()
 
-
-            #  #Calculates actions of the user
-            # if(fingerCounter==-2):
-            #     # cv2.putText(img, "NO HANDS", (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
-            #     #             text_color_hands, 3)
-            #     running = True
-            # else:
-            #     if fingerCounter==0:
-            #         action = "Rock"
-            #     elif fingerCounter==4:
-            #         action = "Paper"
-            #     else:
-            #         action = "Scissors"
             if fingerCounter in permitted_actions:
                 if fingerCounter == 0:
-                    action = "Rock"
+                    action = "R"
                 elif fingerCounter == 5:
-                    action = "Paper"
+                    action = "P"
                 elif fingerCounter == 2:
-                    action = "Scissors"
+                    action = "S"
 
+                # if (countGame+1) % 3 != 0:
+                #     if (countGame+1) %3==1 and countGame!=0:
+                #         ind_table = ind_table+1      # increases table index when reaching to new triple game
+                #     if countGame!=0:
+                #         computer_action = SingleGame.psychology_beat(last_player_action,last_computer_action)
+                #         last_computer_action = computer_action
+                #     else:
+                #         computer_action = "Paper"
+                #         last_computer_action = "Paper"
+                #     computer_action_NUM = ML.action_to_number(computer_action)
+                #     action_NUM = ML.action_to_number(action)
+                #
+                #     computer_action = ML.number_to_action(ML.KNN_prediction(table_ML, KNN)[ind_table])
+                #     # print(int(action_NUM), int(computer_action_NUM), countGame, ind_table,
+                #     #                                        table_ML)
+                #     table_ML = ML.update_results_table(int(action_NUM), int(computer_action_NUM), countGame, ind_table,
+                #                                            table_ML)
+                #
+                # else:
+                #     # computer_action = ML.number_to_action()
+                #     predicted_player_action = int(ML.KNN_prediction(table_ML, KNN)[ind_table])
+                #     # print(ML.number_to_action(predicted_player_action))
+                #     computer_action = SingleGame.beat_action(ML.number_to_action(predicted_player_action))
 
-                last_player_action = action
-
-
-
-
-
-
-
-                #MACHINE LEARNING ALGORITHMS OR PSYCHOLOGY ALGORITHM
-
-                if (countGame+1) % 3 != 0:
-                    if (countGame+1) %3==1 and countGame!=0:
-                        ind_table = ind_table+1      # increases table index when reaching to new triple game
-                    if countGame!=0:
-                        computer_action = SingleGame.psychology_beat(last_player_action,last_computer_action)
-                        last_computer_action = computer_action
-                    else:
-                        computer_action = "Paper"
-                        last_computer_action = "Paper"
-                    computer_action_NUM = ML.action_to_number(computer_action)
-                    action_NUM = ML.action_to_number(action)
-
-                    computer_action = ML.number_to_action(ML.KNN_prediction(table_ML, KNN)[ind_table])
-                    # print(int(action_NUM), int(computer_action_NUM), countGame, ind_table,
-                    #                                        table_ML)
-                    table_ML = ML.update_results_table(int(action_NUM), int(computer_action_NUM), countGame, ind_table,
-                                                           table_ML)
-
+                if countGame==0:
+                    computer_action = "P" #Most throw rock first time, therfore computer throw paper.
+                elif countGame==1:
+                    computer_action = PSYCH.non_dependent_partial_guess()
                 else:
-                    # computer_action = ML.number_to_action()
-                    predicted_player_action = int(ML.KNN_prediction(table_ML, KNN)[ind_table])
-                    # print(ML.number_to_action(predicted_player_action))
-                    computer_action = SingleGame.beat_action(ML.number_to_action(predicted_player_action))
+                    #TODO Choose randomly between all the following methods
+
+                    _,computer_action = PSYCH.depndent_if_repeated(pQ.queue[0],pQ.queue[1])
+
 
 
 
@@ -367,19 +286,19 @@ def operate():
 
                 #=======KEEP OUT
 
-                if (computer_action == 'Rock'):
+                if (computer_action == 'R'):
                     print("doRock()")
-                    #EH.doRock()
-                elif (computer_action == 'Scissors'):
+                    # EH.doRock()
+                elif (computer_action == 'S'):
                     print("doScissors()")
                     # EH.doScissors()
-                elif (computer_action == 'Paper'):
+                elif (computer_action == 'P'):
                     print("doPaper()")
                     # EH.doPaper()
 
 
                 if action != "INVALID ACTION":
-                    g_winner= SingleGame.is_winner(int(ML.action_to_number(action)),int(ML.action_to_number(computer_action)))
+                    g_winner= SingleGame.is_winner(action,int(ML.action_to_number(computer_action)))
                     winner = ""
                     if g_winner==1:
                         winner = "player"
@@ -396,8 +315,18 @@ def operate():
                     print("winner:",winner ,"player action:",action , "  computer action:", computer_action)
 
 
+                    #Round over actions
+                    if pQ.full() and pQ.full():
+                        pQ.get()
+                        cQ.get()
+
+                    #Inserts the new move to the queues.
+                    pQ.put(action)
+                    cQ.put(action)
+
+
                     countGame = countGame + 1
-                    time.sleep(3)
+                    time.sleep(1)
 
 
 
@@ -411,10 +340,6 @@ def operate():
         computerScore=0
 
 
-
-
-def something():
-    print("afhjkds")
 
 
 if __name__ == "__main__":
