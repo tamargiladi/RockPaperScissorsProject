@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import PsychologyModule as PSYCH
 from queue import Queue
 import random
-import ExecuteHand as EH
+#import ExecuteHand as EH
 
 
 MAX_ITERATIONS = 30
@@ -120,7 +120,7 @@ def fingerDetect():
     while (t < MAX_ITERATIONS):
         global final_count
         global playerMove
-        t += 1
+        # t += 1
         success, img = cap.read()
         img = detector.findHands(img)
         lmList = detector.findPosition(img, draw=False)
@@ -134,6 +134,7 @@ def fingerDetect():
         if len(lmList) != 0:
             fingers = []
             inside_iterations += 1
+            t += 1
 
             # Thumb
             if lmList[tipIds[0]][1] < lmList[tipIds[0] - 1][1]:
@@ -257,7 +258,7 @@ def fingerDetect():
                     computer_action = true_action
             #Psycholgy of winners or losers
             else:
-                computer_action = PSYCH.last_winners_or_losser_wins_move(pQ.queue[1],cQ.queue[1]) # TODO:Write the psychological winning method - MOSHE
+                computer_action = PSYCH.last_winners_or_losser_wins_move(pQ.queue[1],cQ.queue[1])   # TODO:Write the psychological winning method - MOSHE
                 # computer_action = PSYCH.non_dependent_partial_guess() #TODO REMOVE ME!
 
 
@@ -290,13 +291,13 @@ def fingerDetect():
     computerMoveLabel.configure(text=hebrew_computerAction)
     if (computer_action == 'Rock'):
         print("doRock()")
-        EH.doRock()
+        # EH.doRock()
     elif (computer_action == 'Scissors'):
         print("doScissors()")
-        EH.doScissors()
+        # EH.doScissors()
     elif (computer_action == 'Paper'):
         print("doPaper()")
-        EH.doPaper()
+        # EH.doPaper()
     start.config(state="normal")
     counter.increase()
 
