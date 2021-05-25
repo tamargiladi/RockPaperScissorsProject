@@ -20,20 +20,31 @@ import ModelMLModule as ML_DATA
 
 
 def KNN_train(X):
-
+    print("X:",X)
     y = X["p1_i"]
     y = y.astype('int')
-    X = X.drop(columns=["p2_i","p1_i"])
+    X = X.drop(columns=["p2_i","p1_i","p2_i-2","p1_i-2"])
 
     TEST_SIZE = 0.1
     neigh = KNeighborsClassifier(n_neighbors=int(np.sqrt(TEST_SIZE*X.shape[0])))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = TEST_SIZE, random_state = 0)
+
+    print(X_train, y_train)
     neigh.fit(X_train, y_train)
+
+    y_pred = neigh.predict(X_test)
+    print("score:",neigh.score(X_test, y_test))
 
     return neigh
 
-def KNN_prediction(X_test,knn):
-    return knn.predict(X_test)
+def KNN_prediction(X_test,knn,y_test):
+    y_pred = knn.predict(X_test)
+    print(knn.score(X_test, y_test))
+
+
+
+    knn.score()
+    return y_pred
 
 def is_winner(p2,p1):
 
@@ -115,5 +126,12 @@ def action_to_number(action):
         return 2
     elif action=="Scissors":
         return 3
+
+
+data = pd.read_csv('data/Rock_Paper_Scissors_Raw.csv')
+
+df = pd.DataFrame(data)
+KNN_train(ML_DATA.final_organize(df))
+
 
 

@@ -56,6 +56,7 @@ def final_organize(df_new):
 
     df_final = df_new.dropna().astype(int).reset_index().drop(columns=["index"])
 
+    print(df_final)
     return df_final
 
 
@@ -64,6 +65,4 @@ data = pd.read_csv("data/Rock_Paper_Scissors_Raw.csv")
 df = pd.DataFrame(data)
 # df_new = pd.DataFrame(index=np.arange(148543), columns=["p1_i","p2_i","p1_i-1",'p2_i-1',"p1_i-2","p2_i-2"])
 
-
-
-
+final_organize(df)
