@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 import PsychologyModule as PSYCH
 from queue import Queue
 import random
-# import ExecuteHand as EH
+import ExecuteHand as EH
 
 
 MAX_ITERATIONS = 30
 computerMove = " "
 labelWidth = 20
 Color = 'aqua'
-status = "Not ready!"  # (Not ready/Ready) get this from the gameSpace
+status = "Not ready!"
 
 
 before_screen = Tk()
@@ -107,7 +107,7 @@ def fingerDetect():
     cap.set(3, wCam)
     cap.set(4, hCam)
 
-    detector = htm.handDetector(detectionCon=0.75)
+    detector = htm.handDetector(detectionCon=0.75)  # we can play with value to adjust the tracking
 
     pTime = 0
     cTime = 0
@@ -257,8 +257,8 @@ def fingerDetect():
                     computer_action = true_action
             #Psycholgy of winners or losers
             else:
-                #TODO:Write the psychological winning method - MOSHE
-                computer_action = PSYCH.non_dependent_partial_guess() #TODO REMOVE ME!
+                computer_action = PSYCH.last_winners_or_losser_wins_move(pQ.queue[1],cQ.queue[1]) # TODO:Write the psychological winning method - MOSHE
+                # computer_action = PSYCH.non_dependent_partial_guess() #TODO REMOVE ME!
 
 
             pQ.get()
@@ -290,13 +290,13 @@ def fingerDetect():
     computerMoveLabel.configure(text=hebrew_computerAction)
     if (computer_action == 'Rock'):
         print("doRock()")
-        # EH.doRock()
+        EH.doRock()
     elif (computer_action == 'Scissors'):
         print("doScissors()")
-        # EH.doScissors()
+        EH.doScissors()
     elif (computer_action == 'Paper'):
         print("doPaper()")
-        # EH.doPaper()
+        EH.doPaper()
     start.config(state="normal")
     counter.increase()
 
