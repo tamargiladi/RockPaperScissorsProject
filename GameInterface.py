@@ -120,7 +120,6 @@ def fingerDetect():
     while (t < MAX_ITERATIONS):
         global final_count
         global playerMove
-        # t += 1
         success, img = cap.read()
         img = detector.findHands(img)
         lmList = detector.findPosition(img, draw=False)
