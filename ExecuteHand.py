@@ -3,6 +3,7 @@ import serial
 import time
 
 TIME = 8
+# arduino = serial.Serial(port='/dev/cu.usbmodem141201', baudrate=9600, timeout=.1)
 arduino = serial.Serial(port='/dev/cu.usbmodem141201', baudrate=9600, timeout=.1)
 
 def write_read(x):
@@ -30,5 +31,12 @@ def doPaper():
     while (t <TIME):
         value = write_read("p")
     #    print(value)  # printing the value
+        t += 1
+
+def doWin():
+    t = 0
+    while (t < TIME):
+        value = write_read("w")
+        #    print(value)  # printing the value
         t += 1
 
