@@ -33,3 +33,10 @@ def doPaper():
     #    print(value)  # printing the value
         t += 1
 
+def doWin():
+    t = 0
+    while (t < TIME):
+        value = write_read("w")
+        #    print(value)  # printing the value
+        t += 1
+
