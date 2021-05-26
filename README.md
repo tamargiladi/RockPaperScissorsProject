@@ -1,2 +1,4 @@
-# RockPaperScissorsProject
-A project of rock paper and scisscors, operates with an actual robot hand. 
+**Rock Paper Scissors Game **
+
+A RPS game that operates with an actual *robotic hand.*
+![robot hand](https://i.ibb.co/Y0vhRZg/robot-img.jpg)
