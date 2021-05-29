@@ -161,7 +161,10 @@ def reset_game():
         pQ.get()
 
     computerScoreLabel.config(text="0")
+    computerMoveLabel.config(text=" ")
     playerScoreLabel.config(text="0")
+    playerMoveLabel.config(text=" ")
+
 
     print("TEMP")
 
