@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tkinter import *
 import numpy
-# import tkinter as tk
-# import GameSpace as GS
 import mediapipe as mp
 import os
 import time
@@ -13,7 +11,7 @@ import matplotlib.pyplot as plt
 import PsychologyModule as PSYCH
 from queue import Queue
 import random
-#import ExecuteHand as EH
+# import ExecuteHand as EH
 
 
 MAX_ITERATIONS = 30
@@ -22,15 +20,21 @@ labelWidth = 20
 Color = 'aqua'
 status = "Not ready!"
 
-
+#Screens
 before_screen = Tk()
+root = Tk()
+
+
 class Counter:
+
     def __init__(self):
         self.value = 0
     def increase(self):
         self.value +=1
     def getValue(self):
         return self.value
+    def resetCounter(self):
+        self.value=0
 
 
 class GameMoves:
@@ -39,10 +43,74 @@ class GameMoves:
         self.playerMove= ""
 
 
+resetGame = Counter()
+
+#todo: reset the game..
+def end_game():
+    after_screen = Tk()
+
+    endingResultLabel = Label(after_screen,text="",font=("Helvetica", 15), background=Color)
+    endingResultLabel.grid(row=0, column=1, columnspan=1, pady=10,padx=10)
+
+    endingWinner = ""
+
+    if playerScore.getValue()> computerScore.getValue():
+        endingWinner = "YOU WIN!"
+    elif playerScore.getValue()< computerScore.getValue():
+        endingWinner = "YOU LOSE!"
+    else:
+        endingWinner = "TIE"
+
+    endingResultLabel.config(text=str(endingWinner))
+
+    if endingWinner == "YOU LOSE!":
+        # EH.doWin()
+        time.sleep(1)
+
+        print("doWin()")
+
+
+    # print("END GAME")
+    # #====Titles score
+    # computerTitleLabel = Label(after_screen,text="Computer Score",font=("Helvetica", 15), background=Color)
+    # playerScoreTitleLabel = Label(after_screen,text="Player Score",font=("Helvetica", 15), background=Color)
+    #
+    #
+    # computerTitleLabel.grid(row=0, column=0, columnspan=1, pady=10,padx=10)
+    # playerScoreTitleLabel.grid(row=0, column=1, columnspan=2, pady=10,padx=10)
+    #
+    #
+    #
+    # #====Final score labels
+    # computerLabelFinal = Label(after_screen, text="0", pady=10, font=("Helvetica", 15), background=Color)
+    # computerLabelFinal.grid(row=1, column=0, columnspan=1, pady=10)
+    # computerLabelFinal.config(text=str(computerScore.getValue()))
+    #
+    # playerLabelFinal = Label(after_screen, text="0", pady=10, font=("Helvetica", 15), background=Color)
+    # playerLabelFinal.grid(row=1, column=1, columnspan=2, pady=10)
+    # playerLabelFinal.config(text=str(playerScore.getValue()))
+
+    # Button configuration
+    # endGame_btn = Button(after_screen, text="End Game", command=end_game_final , borderwidth=3, pady=10, font=("Helvetica", 15))
+    # endGame_btn.grid(row=4, column=0, columnspan=1, pady=50)
+
+    resetGame_btn = Button(after_screen, text="Reset Game", command=reset_game, borderwidth=3, pady=10,
+                         font=("Helvetica", 15))
+    resetGame_btn.grid(row=3, column=1, columnspan=1, pady=50)
+
+    #Window configuration
+    after_screen.eval('tk::PlaceWindow . center')
+
+    after_screen.mainloop()
+    after_screen.destroy()
+
 
 #A function that helps to find the correct fingers.
 def does_contain(test_set,requiered_elements):
     return requiered_elements.issubset(test_set)
+
+
+
 
 
 def find_correct_count(fingers_array,hand):
@@ -62,12 +130,40 @@ def find_correct_count(fingers_array,hand):
     else:
         set_fg= set(fingers_array)
 
-        if does_contain(set_fg,{0,1}) or does_contain(set_fg,{0,1,4,5}) or does_contain(set_fg,{1,4,5}):
-            return 0
+        if hand=="right":
+            if does_contain(set_fg,{0,1}) or does_contain(set_fg,{0,1,4,5}) or does_contain(set_fg,{1,4,5}
+                        or does_contain(set_fg,{0,4,5}) or does_contain(set_fg,{1,4}) or  does_contain(set_fg,{1,5})):
+                return 0
+            elif does_contain(set_fg,{3,4}):
+                return 2
+            else:
+                return most_frequent(fingers_array)
         else:
-            return most_frequent(fingers_array)
+            if does_contain(set_fg,{0,1}) or does_contain(set_fg,{0,1,4,5}) or does_contain(set_fg,{1,4,5}
+                        or does_contain(set_fg, {0,4,5}) or does_contain(set_fg,{0,1,3,4})):
+                return 0
+            elif does_contain(set_fg,{2,3,4,5}) or does_contain(set_fg,{2,4,5}
+                        or does_contain(set_fg,{2,5}) or does_contain(set_fg, {2,3})):
+                print("here!")
+                return 2
+            else:
+                return most_frequent(fingers_array)
 
 
+def reset_game():
+    computerScore.resetCounter()
+    playerScore.resetCounter()
+    counter.resetCounter()
+
+    while not cQ.empty():
+        cQ.get()
+    while not pQ.empty():
+        pQ.get()
+
+    computerScoreLabel.config(text="0")
+    playerScoreLabel.config(text="0")
+
+    print("TEMP")
 
 
 
@@ -205,7 +301,7 @@ def fingerDetect():
         else:
             if final_count == 4:
                 playerMove = "Paper"
-            elif final_count == 0:
+            elif final_count == 0 or final_count==1:
                 playerMove = "Rock"
             else:
                 playerMove="Scissors"
@@ -309,6 +405,8 @@ def fingerDetect():
     computerScoreLabel.config(text=str(computerScore.getValue()))
     playerScoreLabel.config(text=str(playerScore.getValue()))
 
+
+
 countGame = 0
 handMode = ""
 MAX_ROUNDS =2
@@ -320,7 +418,6 @@ computerScore =Counter()
 playerScore = Counter()
 moves = GameMoves()
 
-root = Tk()
 pQ = Queue(maxsize=MAX_ROUNDS)
 cQ = Queue(maxsize=MAX_ROUNDS)
 
@@ -359,8 +456,14 @@ playerScoreFrame.grid(row=2, column=1)
 playerScoreLabel = Label(playerScoreFrame, text="0", width=labelWidth, padx=10, pady=10, font=("Helvetica", 20))
 playerScoreLabel.pack()
 
+#Start button
 start = Button(root, text="Start", command=fingerDetect, borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
-start.grid(row=3, column=0, columnspan=2, pady=50)
+start.grid(row=3, column=0, columnspan=1,padx=10, pady=50)
+
+#End button
+end_btn = Button(root, text="End", command=end_game, borderwidth=3, padx=50, pady=10, font=("Helvetica", 15))
+end_btn.grid(row=3, column=1, columnspan=2, pady=50)
+
 
 
 root.eval('tk::PlaceWindow . center')

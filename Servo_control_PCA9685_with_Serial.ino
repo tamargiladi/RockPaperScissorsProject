@@ -44,9 +44,9 @@ int val; // initial value of input
 int thumbClose = 100;
 int thumbOpen = 310;
 int indexFingerClose = 100;
-int indexFingerOpen = 320;
+int indexFingerOpen = 330;
 int middleFingerClose = 100;
-int middleFingerOpen = 320;
+int middleFingerOpen = 340;
 int ringFingerOpen = 100;
 int ringFingerClose = 300;
 int pinkyFingerOpen = 110;
@@ -175,6 +175,7 @@ void openAll(){
       openThumb();
     }
     thumb = false;
+    
     openIndexFinger();
     indexFinger = false;
     openMiddleFinger();
@@ -195,7 +196,6 @@ void closeAll(){
     closePinkyFinger();
      
     if (thumb == false){
-      delay(shortDelayTime);
       closeThumb();
     }
     thumb = true;
@@ -216,6 +216,23 @@ void scissors(){
       closeThumb();
     }
     thumb = true;
+    
+}
+
+void win(){
+
+  Serial.println("Win");
+    if (thumb == true){
+      openThumb();
+    }
+    thumb = false;
+    
+    openIndexFinger();
+    closeMiddleFinger();
+    closeRingFinger();
+    openPinkyFinger();
+    
+    
     
 }
 
@@ -270,82 +287,89 @@ void loop() {
  {
   val = Serial.read();// then read the serial value
   
-  if (val == '1') //if value input is equals to d
+  if (val == '1') 
   {
     closeThumb();
   }
   
   
-  if (val == '2') //if value input is equals to a
+  if (val == '2') 
   {
     openThumb();
   }
   
   
-  if (val == '3') //if value input is equals to d
+  if (val == '3') 
   {
     closeIndexFinger();
   }
   
   
-  if (val == '4') //if value input is equals to a
+  if (val == '4') 
   {
     openIndexFinger();
   }
   
     
-  if (val == '5') //if value input is equals to d
+  if (val == '5') 
   {
     closeMiddleFinger();
   }
   
   
-  if (val == '6') //if value input is equals to a
+  if (val == '6') 
   {
     openMiddleFinger();
   }
   
   
-  if (val == '8') //if value input is equals to d
+  if (val == '8') 
   {
     openRingFinger();
   }
   
   
-  if (val == '7') //if value input is equals to a
+  if (val == '7') 
   {
     closeRingFinger();
   }
   
 
-    if (val == '0') //if value input is equals to d
+    if (val == '0') 
   {
     openPinkyFinger();
   }
   
   
-  if (val == '9') //if value input is equals to a
+  if (val == '9') 
   {
     closePinkyFinger();
   }
   
 
-  if (val == 'o' || val == 'p') //if value input is equals to a
+  if (val == 'o' || val == 'p') 
   {
     openAll();
   }
   
 
-  if (val == 'c' || val == 'r') //if value input is equals to a
+  if (val == 'c' || val == 'r') 
   {
     closeAll();
   }
 
-  if (val == 's') //if value input is equals to a
+  if (val == 's') 
   {
     scissors();
   }
+
+  if (val == 'w') 
+  {
+    win();
+  }
+  
   Serial.println("-----------------------");
   }
+
   
 }
